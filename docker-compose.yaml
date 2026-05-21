@@ -3,7 +3,7 @@ services:
         build:
             context: .
             dockerfile: Dockerfile
-        container_name: clint-app-container
+        container_name: uiko-app-container
         ports:
             - "8000:80"
         volumes:
@@ -19,7 +19,7 @@ services:
             db:
                 condition: service_healthy
         networks:
-            - clint-network
+            - uiko-network
         healthcheck:
             test: ["CMD", "curl", "-f", "http://localhost/"]
             interval: 10s
@@ -27,30 +27,30 @@ services:
             retries: 3
             start_period: 10s
 
-    # db:
-    #     image: mysql:8.0
-    #     container_name: clint-db-container
-    #     environment:
-    #         MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-    #         MYSQL_DATABASE: ${MYSQL_DATABASE}
-    #         MYSQL_USER: ${MYSQL_USER}
-    #         MYSQL_PASSWORD: ${MYSQL_PASSWORD}
-    #     ports:
-    #         - "3310:3306"
-    #     volumes:
-    #         - clint-db:/var/lib/mysql
-    #     networks:
-    #         - clint-network
-    #     healthcheck:
-    #         test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
-    #         interval: 10s
-    #         timeout: 5s
-    #         retries: 5
-    #         start_period: 15s
+    db:
+        image: mysql:8.0
+        container_name: uiko-db-container
+        environment:
+            MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+            MYSQL_DATABASE: ${MYSQL_DATABASE}
+            MYSQL_USER: ${MYSQL_USER}
+            MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+        ports:
+            - "3310:3306"
+        volumes:
+            - uiko-db:/var/lib/mysql
+        networks:
+            - uiko-network
+        healthcheck:
+            test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+            interval: 10s
+            timeout: 5s
+            retries: 5
+            start_period: 15s
 
-# volumes:
-#     clint-db:
+volumes:
+    uiko-db:
 
 networks:
-    clint-network:
+    uiko-network:
         driver: bridge

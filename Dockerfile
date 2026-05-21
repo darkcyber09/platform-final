@@ -24,9 +24,8 @@ RUN composer install --no-interaction --no-scripts --optimize-autoloader --no-de
 
 COPY . .
 
-
-# Now run post-install scripts after app code is available
-RUN composer install --no-interaction --optimize-autoloader --no-dev --no-ansi || true
+RUN composer install --no-interaction --optimize-autoloader --no-dev --no-ansi
+RUN if [ ! -f bin/console ]; then echo "ERROR: bin/console missing" && ls -la && false; fi
 RUN php bin/console importmap:install --no-interaction
 
 RUN php bin/console cache:warmup --env=prod --no-debug || true
